@@ -14,10 +14,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body class="">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Inicio</a>
+            <a class="navbar-brand" href="/">Inicio</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -28,9 +28,9 @@
                   Menu
                 </a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                            <li><a class="dropdown-item" href="#">Libros</a></li>
-                            <li><a class="dropdown-item" href="#">Autores</a></li>
-                            <li><a class="dropdown-item" href="#">Editoriales</a></li>
+                            <li><a class="dropdown-item" href="libros">Libros</a></li>
+                            <li><a class="dropdown-item" href="autores">Autores</a></li>
+                            <li><a class="dropdown-item" href="editoriales">Editoriales</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -40,7 +40,7 @@
     <div class="container">
         <br>
         <div>
-            <table class="table table-striped">
+            <table class="table table-dark">
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -53,19 +53,19 @@
                         <th>Publisher</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {{#libross_m}}
+                <tbody class="table-success">
+                    {{#libros_m}}
                     <tr>
-                        <td>{{id}}</td>
+                        <td> <a href="libros/{{id}}">{{id}}</a></td>
                         <td>{{title}}}</td>
                         <td>{{edition}}</td>
-                        <td>{{copyright}}}</td>
-                        <td>{{Language}}}</td>
+                        <td>{{copyright}}</td>
+                        <td>{{language}}</td>
                         <td>{{pages}}</td>
-                        <td><a href="authors/{{author_id}}">Abraham Silberschatz</a></td>
-                        <td><a href="publishers/{{publisher_id}}">John Wiley & Sons</a></td>
+                        <td><a href="autoress/{{author_id}}">{{author}}</a></td>
+                        <td><a href="editoriales/{{publisher_id}}">{{publisher}}</a></td>
                     </tr>
-                    {{/libross_m}}
+                    {{/libros_m}}
                 </tbody>
             </table>
         </div>
