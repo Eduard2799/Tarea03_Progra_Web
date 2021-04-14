@@ -152,6 +152,9 @@ class Route {
     else if ($type=='application/xml')
        $_REQUEST = simplexml_load_string(file_get_contents('php://input'));
 
+	if (isset($_REQUEST['_method']))
+	  $method = $_REQUEST['_method'];
+	
     self::$routes = preg_replace('/\/+/', '/', self::$routes);
 
     // Check if route is defined without regex
@@ -309,10 +312,11 @@ function to_html($array) {
     return $html;
 }
 
-function redirect($url, $statusCode = 303) {
+function redirect($to = null, $status = 302, $headers = [], $secure = null) {
   global $redirect;
-  $redirect = $url;
+  $redirect = $to;
 }
+
 ?>
 <?php
 
@@ -401,7 +405,7 @@ class Template {
         if ( isset( $index ) ) {
             $string = str_replace( $this->l_delim . '.' . $this->r_delim, $index+1, $string );
         }
-        return str_replace( $this->l_delim . $key . $this->r_delim, strip_tags($value), $string );
+        return str_replace( $this->l_delim . $key . $this->r_delim, $value, $string );
     }
 
     /**
@@ -473,7 +477,7 @@ class Template {
         return $match;
     }
 }
-        
+
 function view($filename,$variables=[]) {
     if (!isset($template)) {
       $template = new Template();
@@ -481,7 +485,15 @@ function view($filename,$variables=[]) {
     foreach ($variables as $key => $value) {
       $template->assign($key,$value);
     }
-    return $template->parse('views/'.$filename.'.html');
+	if (file_exists('views/'.$filename.'.html'))
+      return $template->parse('views/'.$filename.'.html');
+	if (file_exists('views/'.$filename.'.php')) {
+	  extract($variables);
+	  ob_start();
+	  include('views/'.$filename.'.php');
+	  return ob_get_clean();
+    }
+	return 'Template error';
 }
 ?>
 <?php
@@ -494,12 +506,12 @@ class Query {
 
   public $params = [];
   
-  public function where($field,$value,$extra=null) {
+  public function where($field,$value,$extra = null) {
 	$this->params['where'] = [$field=>$value];
 	return $this;
   }
   
-  public function orWhere($field,$value,$extra=null) {
+  public function orWhere($field,$value,$extra = null) {
 	$this->params['where'] = [$field=>$value];
 	return $this;
   }
@@ -790,10 +802,10 @@ abstract class Controller {
   
   public function index() {}
   public function create() {}
-  public function store($param1=NULL) {}
+  public function store($param1 = null) {}
   public function show($id) {}
   public function edit($id) {}
-  public function update($param1,$param2=NULL) {}
+  public function update($param1,$param2 = null) {}
   public function destroy($id) {}
 }
 ?>
@@ -831,7 +843,7 @@ class Input {
 
 class Cookie {
   
-  public static function get($key,$default=null) {
+  public static function get($key,$default = null) {
 	return $_COOKIE[$key];
   }
   
@@ -939,3 +951,118 @@ class Auth {
   public static function onceBasic() {
   }
 }
+?><?php
+
+/**
+ * Slimdown - A very basic regex-based Markdown parser. Supports the
+ * following elements (and can be extended via Slimdown::add_rule()):
+ *
+ * - Headers
+ * - Links
+ * - Bold
+ * - Emphasis
+ * - Deletions
+ * - Quotes
+ * - Inline code
+ * - Blockquotes
+ * - Ordered/unordered lists
+ * - Horizontal rules
+ *
+ * Author: Johnny Broadway <johnny@johnnybroadway.com>
+ * Website: https://gist.github.com/jbroadway/2836900
+ * License: MIT
+ */
+class Markdown {
+	public static $rules = array (
+	    '/\r\n/' =>  "\n" ,  
+		'/(#+)(.*)/' => 'self::header',                           // headers
+		'/!\[([^\[]+)\]\(([^\)]+)\)/' => '<img src=\'\2\' alt=\'\1\'>',  // images
+		'/\[([^\[]+)\]\(([^\)]+)\)/' => '<a href=\'\2\'>\1</a>',  // links
+		'/\¿([^\¿]+)\?\(([^\)]+)\)/' => '<label for="\2"><input type="radio" id="\2" name="\1" value="\2"/> \2</label>',  // radio
+		'/(\*\*|__)(.*?)\1/' => '<strong>\2</strong>',            // bold
+		'/(\*|_)(.*?)\1/' => '<em>\2</em>',                       // emphasis
+		'/\~\~(.*?)\~\~/' => '<del>\1</del>',                     // del
+		'/\:\"(.*?)\"\:/' => '<q>\1</q>',                         // quote
+		'/`((.|\n)*?)`/' => '<code style="white-space: pre">\1</code>',                         // inline code
+		'/\n\*(.*)/' => 'self::ul_list',                          // ul lists
+		'/\n[0-9]+\.(.*)/' => 'self::ol_list',                    // ol lists
+		'/\n(&gt;|\>)(.*)/' => 'self::blockquote',               // blockquotes
+		'/\n-{5,}/' => "\n<hr />",                                // horizontal rule
+		'/([^\n]+)\n/' => 'self::para',                         // add paragraphs
+		'/<\/ul>\s?<ul>/' => '',                                  // fix extra ul
+		'/<\/ol>\s?<ol>/' => '',                                  // fix extra ol
+		'/<\/blockquote><blockquote>/' => "\n"                    // fix extra blockquote
+	);
+
+	private static function para ($regs) {
+		$line = $regs[1];
+		$trimmed = trim ($line);
+		if (preg_match ('/^<\/?(ul|ol|li|h|p|bl)/', $trimmed)) {
+			return "\n" . $line . "\n";
+		}
+		return sprintf ("<p>%s</p>", $trimmed);
+	}
+
+	private static function ul_list ($regs) {
+		$item = $regs[1];
+		return sprintf ("\n<ul>\n\t<li>%s</li>\n</ul>", trim ($item));
+	}
+
+	private static function ol_list ($regs) {
+		$item = $regs[1];
+		return sprintf ("\n<ol>\n\t<li>%s</li>\n</ol>", trim ($item));
+	}
+
+	private static function blockquote ($regs) {
+		$item = $regs[2];
+		return sprintf ("\n<blockquote>%s</blockquote>", trim ($item));
+	}
+
+	private static function header ($regs) {
+		list ($tmp, $chars, $header) = $regs;
+		$level = strlen ($chars);
+		return sprintf ('<h%d>%s</h%d>', $level, trim ($header), $level);
+	}
+
+	/**
+	 * Add a rule.
+	 */
+	public static function add_rule ($regex, $replacement) {
+		self::$rules[$regex] = $replacement;
+	}
+
+	/**
+	 * Render some Markdown into HTML.
+	 */
+	public static function convertToHtml ($text) {
+		$text = "\n" . $text . "\n";
+		foreach (self::$rules as $regex => $replacement) {
+			if (is_callable ( $replacement)) {
+				$text = preg_replace_callback ($regex, $replacement, $text);
+			} else {
+				$text = preg_replace ($regex, $replacement, $text);
+			}
+		}
+		return trim ($text);
+	}
+}
+
+?><?php
+/**
+ * View Facade
+ * @author  Armando Arce <armando.arce@gmail.com>
+ */
+
+class View{
+
+  public static function make($filename,$variables=[]) {
+     view($filename,$variables);
+  }
+  
+  public static function exists($filename) {
+     return (file_exists('views/'.$filename.'.html') || 
+		     file_exists('views/'.$filename.'.php'));
+  }
+
+}
+?>
