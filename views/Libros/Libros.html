@@ -43,7 +43,6 @@
             <table class="table table-dark">
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Title</th>
                         <th>Edition</th>
                         <th>Copyright</th>
@@ -56,13 +55,14 @@
                 <tbody class="table-success">
                     {{#libros_m}}
                     <tr>
-                        <td> <a href="libros/{{id}}">{{id}}</a></td>
-                        <td>{{title}}</td>
+                        <td>
+                            <a href="libros/{{id}}">{{title}}</a>
+                        </td>
                         <td>{{edition}}</td>
                         <td>{{copyright}}</td>
                         <td>{{language}}</td>
                         <td>{{pages}}</td>
-                        <td><a href="autoress/{{author_id}}">{{author}}</a></td>
+                        <td><a href="autores/{{author_id}}">{{author}}</a></td>
                         <td><a href="editoriales/{{publisher_id}}">{{publisher}}</a></td>
                     </tr>
                     {{/libros_m}}

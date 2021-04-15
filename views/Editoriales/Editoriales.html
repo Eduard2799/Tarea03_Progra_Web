@@ -43,7 +43,6 @@
             <table class="table table-dark">
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Publisher</th>
                         <th>Country</th>
                         <th>Founded</th>
@@ -53,8 +52,9 @@
                 <tbody class="table-success">
                     {{#editoriales_m}}
                     <tr>
-                        <td> <a href="autores/{{id}}">{{id}}</a></td>
-                        <td>{{publisher}}</td>
+                        <td>
+                            <a href="editoriales/{{id}}">{{publisher}}</a>
+                        </td>
                         <td>{{country}}</td>
                         <td>{{founded}}</td>
                         <td>{{genere}}</td>
