@@ -31,6 +31,49 @@
       
       return view('Editoriales/Muestra', ['editorial_m' => $editorial_m, 'libros_m' => $libs_edit]);
     }
+
+    public function edit($id) {
+      $editorial_m = Editorial::find($id);
+      
+      return view('Editoriales/Edita', ['Editorial_m' => $editorial_m]);
+    }
+
+    public function update($_,$id) {
+
+      $publisher = Input::get('publisher');
+      $country = Input::get('country');
+      $founded = Input::get('founded');
+      $genere = Input::get('genere');
+
+      $item = ['publisher' => $publisher, 'country' => $country, 'founded' => $founded, 'genere' => $genere];
+
+      Editorial::update($id,$item);
+     
+      return redirect('/editoriales');
+
+    }
+
+    public function create() { 
+      return view('Editoriales/Crea');
+    }
+
+    public function store()
+    {
+      $publisher = Input::get('publisher');
+      $country = Input::get('country');
+      $founded = Input::get('founded');
+      $genere = Input::get('genere');
+
+      $item = ['publisher' => $publisher, 'country' => $country, 'founded' => $founded, 'genere' => $genere];
+      //  echo "<pre>";
+      // var_dump($item);
+      // echo "</pre>";
+      // die();
+
+      Editorial::create($item);
+     
+      return redirect('/editoriales');      
+    }
     
   }
 

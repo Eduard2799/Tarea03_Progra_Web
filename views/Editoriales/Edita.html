@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informacion Editorial</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Inicio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+            <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Menu
+                </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                            <li><a class="dropdown-item" href="/libros">Libros</a></li>
+                            <li><a class="dropdown-item" href="/autores">Autores</a></li>
+                            <li><a class="dropdown-item" href="/editoriales">Editoriales</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br><br>
+    <div class="container">
+        <h1>Editar Editorial</h1>
+        {{#Editorial_m}}
+        <form action="/editoriales/{{id}}" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <fieldset>
+                <div class="row">
+                    <div class="col-6 col-sm-3">
+                        <legend>Publisher</legend>
+                        <div class="mb-3">
+                            <input type="text" id="" name="publisher" class="form-control" placeholder="" value="{{publisher}}">
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <legend>Country</legend>
+                        <div class="mb-3">
+                            <input type="text" id="" name="country" class="form-control" placeholder="" value="{{country}}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 col-sm-3">
+                        <legend>Founded</legend>
+                        <div class="mb-3">
+                            <input type="text" id="" name="founded" class="form-control" placeholder="" value="{{founded}}">
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <legend>Genere</legend>
+                        <div class="mb-3">
+                            <input type="text" id="" name="genere" class="form-control" placeholder="" value="{{genere}}">
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            {{/Editorial_m}}
+            <input type="submit" class="btn btn-success btn-lg" value="Save">
+        </form>
+    </div>
+</body>
+
+</html>

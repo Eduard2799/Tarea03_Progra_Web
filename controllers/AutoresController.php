@@ -45,6 +45,7 @@
 
     public function store()
     {
+      // echo "Hola";
       $author = Input::get('author');
       $nationality = Input::get('nationality');
       $birth_year = Input::get('birth_year');
