@@ -45,7 +45,6 @@
 
     public function store()
     {
-      // echo "Hola";
       $author = Input::get('author');
       $nationality = Input::get('nationality');
       $birth_year = Input::get('birth_year');
@@ -53,10 +52,10 @@
 
       $item = ['author' => $author, 'nationality' => $nationality, 'birth_year' => $birth_year, 'fields' => $fields];
 
-      echo "<pre>";
-      var_dump($item);
-      echo "</pre>";
-      die();
+      // echo "<pre>";
+      // var_dump($item);
+      // echo "</pre>";
+      // die();
 
       Autor::create($item);
      
