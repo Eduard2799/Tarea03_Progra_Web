@@ -26,10 +26,6 @@
       $libro_m = Libro::find($id);
       $autor_m = Autor::where('id',$libro_m[0]["author_id"]);
       $editorial_m = Editorial::where('id',$libro_m[0]["publisher_id"]);
-      // echo "<pre>";
-      // var_dump($editorial_m);
-      // echo "</pre>";
-      // die();
       
       return view('Libros/Muestra', ['Libro_m' => $libro_m, 'Autor_m' => $autor_m, 'Editorial_m' => $editorial_m, 'edit' => false, 'disabled' => 'disabled']);
     }
@@ -56,21 +52,8 @@
       $author_id = Input::get('author_id');
       $publisher_id = Input::get('publisher_id');
 
-      
-      // echo "<pre>";
-      // var_dump($Author[0]);
-      // echo "</pre>";
-      // die();
-
       $item = ['title' => $title, 'edition' => $edition, 'copyright' => $copyright, 'language' => $language, 
               'pages' => $pages, 'author_id' => $author_id, 'publisher_id' => $publisher_id];
-
-      // echo "<pre>";
-      // var_dump($item);
-      // echo "</pre>";
-      // echo "id: ";
-      // var_dump($id);
-      // die();
 
       Libro::update($id,$item);
      
@@ -78,10 +61,33 @@
 
     }
 
+    public function create() { 
+      $authores_m = Autor::all();
+      $editorials_m = Editorial::all();
+
+      return view('Libros/Crea', ['authores_m' => $authores_m, 'editorials_m' => $editorials_m]);
+    }
+
     public function store()
     {
-      echo "Hola";
-      
+      $title = Input::get('title');
+      $edition = Input::get('edition');
+      $copyright = Input::get('copyright');
+      $language = Input::get('language');
+      $pages = Input::get('pages');
+      $author_id = Input::get('author_id');
+      $publisher_id = Input::get('publisher_id');
+
+      $item = ['title' => $title, 'edition' => $edition, 'copyright' => $copyright, 'language' => $language, 
+              'pages' => $pages, 'author_id' => $author_id, 'publisher_id' => $publisher_id];
+      //  echo "<pre>";
+      // var_dump($item);
+      // echo "</pre>";
+      // die();
+
+      Libro::create($item);
+     
+      return redirect('/libros');      
     }
 
   }
