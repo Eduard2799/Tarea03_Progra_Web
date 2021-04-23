@@ -1,5 +1,8 @@
 <?php
 
+  require_once('models/editorial/Editorial.php');
+  require_once('models/libro/Libro.php');
+
   class EditorialesController extends Controller {
 
     Static $libros_1 = [
@@ -18,27 +21,17 @@
     ];
     
     public function index() {      
-      return view('Editoriales/Editoriales', ['editoriales_m' => self::$editoriales_m]); 
+      return view('Editoriales/Editoriales', ['editoriales_m' => Editorial::all()]); 
       //echo 'Hello, World!';
     }
 
     public function show($id) { 
-      $editorial_m = [];
-      $libs_edit = [];
-      foreach (self::$editoriales_m as $edit){
-        if ($edit['id'] == $id){
-          $editorial_m = $edit;
-          if($edit['id'] == 1){
-            $libs_edit = self::$libros_1;
-          }
-          else if($edit['id'] == 2){
-            $libs_edit = self::$libros_2;
-          }
-        }
-      }
+      $editorial_m = Editorial::find($id);
+      $libs_edit = Libro::where('publisher_id',$editorial_m[0]['id']);
       
       return view('Editoriales/Muestra', ['editorial_m' => $editorial_m, 'libros_m' => $libs_edit]);
-      }
     }
+    
+  }
 
 ?>

@@ -1,44 +1,62 @@
 <?php
 
-  class AutoresController extends Controller {
-    
-    Static $libros_1 = [
-      ['books__book_id' => '1', 'books__title' => 'Operating System Concepts'],
-      ['books__book_id' => '2', 'books__title' => 'Database System Concepts']
-    ];
+  require_once('models/autor/Autor.php');
+  require_once('models/libro/Libro.php');
 
-    Static $libros_2 = [
-      ['books__book_id' => '3', 'books__title' => 'Computer Networks'],
-      ['books__book_id' => '4', 'books__title' => 'Modern Operating Systems']
-    ];
-
-    static $autores_m = [
-      ['id' => '1', 'author' => 'Abraham Silberschatz', 'nationality' => 'Israelis / American', 'birth_year' => '1952', 'fields' => 'Database Systems, Operating Systems'],
-      ['id' => '2', 'author' => 'Andrew S. Tanenbaum', 'nationality' => 'Dutch / American', 'birth_year' => '1994', 'fields' => ' 	Distributed computing, Operating Systems', 'Computer Networks']
-    ];
-    
+  class AutoresController extends Controller {   
+        
     public function index() {      
-        return view('Autores/Autores', ['autores_m' => self::$autores_m]);
+      return view('Autores/Autores', ['autores_m' => Autor::all()]);
       //echo 'Hello, World!';
     }
 
     public function show($id) { 
-        $autor_m = [];
-        $libs_aut = [];
-        foreach (self::$autores_m as $aut){
-          if ($aut['id'] == $id){
-            $autor_m = $aut;
-            if($aut['id'] == 1){
-              $libs_aut = self::$libros_1;
-            }
-            else if($aut['id'] == 2){
-              $libs_aut = self::$libros_2;
-            }
-          }
-        }
+        $autor_m = Autor::find($id);
+        $libs_aut = Libro::where('author_id',$autor_m[0]['id']);
+        // echo "<pre>";
+        // var_dump($libs_aut);
+        // echo "</pre>";
+        // die();
         
         return view('Autores/Muestra', ['autor_m' => $autor_m, 'libros_m' => $libs_aut]);
-        }
     }
 
+    public function edit($id) { 
+      $autor_m = Autor::find($id);
+      $libs_aut = Libro::where('author_id',$autor_m[0]['id']);
+      // echo "<pre>";
+      // var_dump($libs_aut);
+      // echo "</pre>";
+      // die();
+      
+      return view('Autores/Edita', ['autor_m' => $autor_m, 'libros_m' => $libs_aut]);
+    }
+
+    public function update($_,$id)
+    {
+      // $Author = [];
+      // $Author[0]->title = Input::get('author');
+      // $Author[0]->nationality = Input::get('nationality');
+      // $Author[0]->birth_year = Input::get('birth_year');
+      // $Author[0]->fields = Input::get('fields');
+
+      $author = Input::get('author');
+      $nationality = Input::get('nationality');
+      $birth_year = Input::get('birth_year');
+      $fields = Input::get('fields');;
+
+      $item = ['author' => $author, 'nationality' => $nationality, 'birth_year' => $birth_year, 'fields' => $fields];
+
+      // echo "<pre>";
+      // var_dump($item);
+      // echo "</pre>";
+      // die();
+
+
+      Autor::update($id,$item);
+     
+      return redirect('/autores');
+
+    }
+  }
 ?>

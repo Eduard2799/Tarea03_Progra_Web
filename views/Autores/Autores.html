@@ -12,6 +12,8 @@
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -43,21 +45,21 @@
             <table class="table table-dark">
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Author</th>
                         <th>Nationality</th>
                         <th>Birth year</th>
                         <th>Fields</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="table-success">
                     {{#autores_m}}
                     <tr>
-                        <td> <a href="autores/{{id}}">{{id}}</a></td>
-                        <td>{{author}}</td>
+                        <td><a href="autores/{{id}}">{{author}}</a></td>
                         <td>{{nationality}}</td>
                         <td>{{birth_year}}</td>
                         <td>{{fields}}</td>
+                        <td><a href="autores/{{id}}/edit"><i class="fa fa-edit"></i>
                     </tr>
                     {{/autores_m}}
                 </tbody>
