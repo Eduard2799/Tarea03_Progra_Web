@@ -46,33 +46,35 @@
       return view('Libros/Edita', ['Libro_m' => $libro_m, 'authores_m' => $authores_m, 'editorials_m' => $editorials_m]);
     }
 
-    public function update($id) {
+    public function update($_,$id) {
 
-      $Author = [];
-      $Author[0]->title = Input::get('title');
-      $Author[0]->edition = Input::get('edition');
-      $Author[0]->copyright = Input::get('copyright');
-      $Author[0]->language = Input::get('language');
-      $Author[0]->pages = Input::get('pages');
-      $Author[0]->author_id = Input::get('author_id');
-      $Author[0]->publisher_id = Input::get('publisher_id');
+      $title = Input::get('title');
+      $edition = Input::get('edition');
+      $copyright = Input::get('copyright');
+      $language = Input::get('language');
+      $pages = Input::get('pages');
+      $author_id = Input::get('author_id');
+      $publisher_id = Input::get('publisher_id');
 
-      // $author = Input::get('author');
-      // $nationality = Input::get('nationality');
-      // $birth_year = Input::get('birth_year');
-      // $fields = Input::get('fields');;
+      
+      // echo "<pre>";
+      // var_dump($Author[0]);
+      // echo "</pre>";
+      // die();
 
-      // $item = ['author' => $author, 'nationality' => $nationality, 'birth_year' => $birth_year, 'fields' => $fields];
+      $item = ['title' => $title, 'edition' => $edition, 'copyright' => $copyright, 'language' => $language, 
+              'pages' => $pages, 'author_id' => $author_id, 'publisher_id' => $publisher_id];
 
-      echo "<pre>";
-      var_dump($Author[0]);
-      echo "</pre>";
-      die();
+      // echo "<pre>";
+      // var_dump($item);
+      // echo "</pre>";
+      // echo "id: ";
+      // var_dump($id);
+      // die();
 
-
-      Autor::update($id,$item);
+      Libro::update($id,$item);
      
-      return redirect('/autores');
+      return redirect('/libros');
 
     }
 
